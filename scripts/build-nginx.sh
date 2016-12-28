@@ -28,11 +28,20 @@ if [ ! -d $TOPDIR/build/$NGINX_DIR ]; then
 	tar xf pkg/$NGINX -C build
 fi
 
-if $(which apt >/dev/null 2>&1); then
-	apt-get install -y build-essential
-	apt-get install -y libpcre++-dev
-	apt-get install -y libssl-dev
-fi
+function prepare_nginx() {
+	if $(which apt >/dev/null 2>&1); then
+		apt-get install -y build-essential
+		apt-get install -y libpcre++-dev
+		apt-get install -y libssl-dev
+	fi
+
+	if $(which yum >/dev/null 2>&1); then
+		yum install -y pcre-devel
+		yum install -y openssl-devel
+	fi
+}
+
+prepare_nginx
 
 pushd build/$NGINX_DIR
 ./configure  --with-http_ssl_module --prefix=$TOPDIR/install
