@@ -13,7 +13,8 @@ gnutls_is_install()
 }
 
 if $(which apt-get >/dev/null 2>&1); then
-	apt-get install nettle-dev
+	apt-get install -y nettle-dev
+	apt-get install -y build-essential
 fi
 
 if $(which yum >/dev/null 2>&1); then
@@ -22,6 +23,7 @@ fi
 
 mkdir -p pkg
 mkdir -p build
+mkdir -p install
 
 if [ ! -f pkg/$GNU_TLS ]; then
 	wget GNU_TLS_URL -O pkg/$GNU_TLS
@@ -30,6 +32,6 @@ fi
 tar xf pkg/$GNU_TLS -C build
 
 pushd build/$GNU_TLS_DIR
-./configure --disable-non-suiteb-curves
+./configure --disable-non-suiteb-curves --prefix=$TOPDIR/install
 make && make install
 popd
