@@ -15,6 +15,8 @@ gnutls_is_install()
 if $(which apt-get >/dev/null 2>&1); then
 	apt-get install -y nettle-dev
 	apt-get install -y build-essential
+	apt install -y autogen
+	apt install -y autoconf
 fi
 
 if $(which yum >/dev/null 2>&1); then

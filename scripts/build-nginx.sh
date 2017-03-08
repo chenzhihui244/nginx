@@ -1,23 +1,30 @@
 #!/bin/sh
 
+TOPDIR=`pwd`
+
 NGINX=nginx-1.11.4.tar.gz
 NGINX_DIR=${NGINX%\.*}
 NGINX_DIR=${NGINX_DIR%\.*}
 NGINX_URL=http://nginx.org/download/nginx-1.11.4.tar.gz
-NGINX_PATH=$TOPDIR/install/ngix
-
-TOPDIR=`pwd`
+NGINX_PATH=$TOPDIR/install
 
 nginx_is_install()
 {
-	test -d $TOPDIR/install/nginx
+	test -f $NGINX_PATH/sbin/nginx
 }
+
+if nginx_is_install; then
+	echo "$NGINX is already installed"
+	exit 0
+fi
 
 mkdir -p build
 mkdir -p install
 
 if [ ! -d $TOPDIR/build/$NGINX_DIR ]; then
-	wget $NGINX_URL -O pkg/$NGINX
+	if [ ! -f pkg/$NGINX ]; then
+		wget $NGINX_URL -O pkg/$NGINX
+	fi
 	tar xf pkg/$NGINX -C build
 fi
 
