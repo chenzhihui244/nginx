@@ -4,9 +4,12 @@ TOPDIR=`pwd`
 
 source scripts/profile
 
-cp conf/nginx.conf.webserver $NGINX_PATH/conf/nginx.conf
+cp conf/nginx/nginx.conf $NGINX_PATH/conf/nginx.conf
+mkdir -p $NGINX_PATH/conf/conf.d
+mv conf/nginx/nginx.conf.webserver $NGINX_PATH/conf/conf.d/server.conf
 
 # start nginx
+$NGINX_PATH/sbin/nginx -s stop
 $NGINX_PATH/sbin/nginx
 
 sleep 10
