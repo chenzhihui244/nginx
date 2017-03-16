@@ -10,12 +10,12 @@ cd /etc/pki/CA/
 openssl genrsa -out private/cakey.pem 2048
 openssl req -new -x509 -key private/cakey.pem -out cacert.pem <<EOF
 CN
-Zhejiang
-Hangzhou
+Guangdong
+Shenzhen
 Huawei
 Huawei
 Huawei
-liupeifeng3@huawei.com
+chenzhihui4@huawei.com
 EOF
 
 cd $NGINX_PATH/conf
@@ -23,12 +23,12 @@ cd $NGINX_PATH/conf
 openssl genrsa -out nginx.key 2048
 openssl req -new -key nginx.key -out nginx.csr <<EOF
 CN
-Zhejiang
-Hangzhou
+Guangdong
+Shenzhen
 Huawei
 Huawei
 Huawei
-liupeifeng3@huawei.com
+chenzhihui4@huawei.com
 
 
 EOF
