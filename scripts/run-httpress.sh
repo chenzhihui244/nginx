@@ -2,10 +2,13 @@
 
 source scripts/profile
 
-requests=200000
+target=${1-"localhost"}
+
 threads=64
-connections=100
-url=https://localhost/index.html
+(( connections=threads*4 ))
+(( requests=connections*4000 ))
+
+url=https://${target}/index.html
 #url=http://localhost/index.html
 
 httpress -n $requests -c $connections -t $threads $url

@@ -1,6 +1,39 @@
 
+user  root;
+
+worker_processes  64;
+worker_cpu_affinity auto;
+
+error_log  logs/error.log;
+
+pid        logs/nginx.pid;
+
+events {
+    worker_connections  65535;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    server_tokens           off;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"'
+		  '"$ssl_client_s_dn" "$ssl_client_serial" "$ssl_client_verify"';
+
+    access_log  logs/access.log  main;
+
+    sendfile        on;
+    tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
     server {
-		listen 80;
+	listen 80;
 
         location / {
             root   html;
@@ -14,11 +47,11 @@
     }
 
     server {
-        listen       443 ssl;
+        listen       44301 ssl;
         server_name  nginx-server;
 
-		ssl_certificate nginx.crt;
-		ssl_certificate_key nginx.key;
+	ssl_certificate nginx.crt;
+	ssl_certificate_key nginx.key;
 
         #charset koi8-r;
 
@@ -27,8 +60,6 @@
             index  index.html index.htm;
         }
 
-        #error_page  404              /404.html;
-
         # redirect server error pages to the static page /50x.html
         #
         error_page   500 502 503 504  /50x.html;
@@ -36,3 +67,4 @@
             root   html;
         }
     }
+}

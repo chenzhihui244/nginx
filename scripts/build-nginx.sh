@@ -28,7 +28,7 @@ if [ ! -d $TOPDIR/build/$NGINX_DIR ]; then
 	tar xf pkg/$NGINX -C build
 fi
 
-if $(which apt-get >/dev/null 2>&1); then
+if $(which apt >/dev/null 2>&1); then
 	apt-get install -y build-essential
 	apt-get install -y libpcre++-dev
 	apt-get install -y libssl-dev
@@ -40,12 +40,16 @@ make && make install
 popd
 
 if nginx_is_install; then
-	echo "export NGINX_PATH=$NGINX_PATH" >> scripts/profile
-	echo 'export PATH=$PATH:$NGINX_PATH/sbin' >> scripts/profile
+	if [ ! $(grep -q "NGINX_PATH" scripts/profile) ]; then
+		echo "export NGINX_PATH=$NGINX_PATH" >> scripts/profile
+		echo 'export PATH=$PATH:$NGINX_PATH/sbin' >> scripts/profile
+	fi
+
+	ulimit -n 102400
+
 	echo "$NGINX install successfully"
 	exit 0
 else
-	echo "Failed to $NGINX"
+	echo "Failed to install $NGINX"
 	exit 1
 fi
-

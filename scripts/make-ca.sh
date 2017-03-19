@@ -4,8 +4,8 @@ TOPDIR=`pwd`
 
 source scripts/profile
 
-mkdir -p /etc/pki/CA/private
-cd /etc/pki/CA/
+mkdir -p $NGINX_PATH/etc/pki/CA/private
+cd $NGINX_PATH/etc/pki/CA/
 
 openssl genrsa -out private/cakey.pem 2048
 openssl req -new -x509 -key private/cakey.pem -out cacert.pem <<EOF
@@ -33,4 +33,4 @@ chenzhihui4@huawei.com
 
 EOF
 
-openssl x509 -req -in nginx.csr -CA /etc/pki/CA/cacert.pem -CAkey /etc/pki/CA/private/cakey.pem -CAcreateserial -out nginx.crt
+openssl x509 -req -in nginx.csr -CA $NGINX_PATH/etc/pki/CA/cacert.pem -CAkey $NGINX_PATH/etc/pki/CA/private/cakey.pem -CAcreateserial -out nginx.crt

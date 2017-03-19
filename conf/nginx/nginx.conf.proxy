@@ -1,59 +1,93 @@
-upstream backend {
-	server 192.168.1.211:80;
-	keepalive 300;
+user  root;
+
+worker_processes  64;
+worker_cpu_affinity auto;
+
+error_log  logs/error.log;
+
+pid        logs/nginx.pid;
+
+events {
+    worker_connections  65535;
 }
 
-server {
-	listen       443;
-	server_name  nginx-proxy;
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+	server_tokens           off;
 
-	ssl on;
-	ssl_certificate nginx.crt;
-	ssl_certificate_key nginx.key;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"'
+		  '"$ssl_client_s_dn" "$ssl_client_serial" "$ssl_client_verify"';
 
-	ssl_protocols TLSv1 TLSv1.2;
-	ssl_prefer_server_ciphers on;
-	#ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
-	ssl_ciphers 'ECDHE+RSAGCM:ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:!DSS:!DH:!AECDH:AES:!PSK';
-	ssl_session_cache off;
+    access_log  logs/access.log  main;
 
-	#charset koi8-r;
+    sendfile        on;
+    tcp_nopush     on;
 
-	location / {
-		#proxy_set_header Host $host;
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_set_header X-Real-IP $remote_addr;
-		proxy_set_header X-Forwarded-Host $Host;
-		proxy_set_header X-Forwarded-Prot $Scheme;
-		proxy_pass   http://backend;
-		proxy_cache off;
-		proxy_http_version 1.1;
-		#root   html;
-		#index  index.html index.htm;
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+	upstream backend {
+		server backend_server;
+		keepalive 300;
 	}
 
-	# redirect server error pages to the static page /50x.html
-	#
-	error_page   500 502 503 504  /50x.html;
-	location = /50x.html {
-		root   html;
+	server {
+		listen       44301;
+		server_name  nginx-proxy;
+
+		ssl on;
+		ssl_certificate nginx.crt;
+		ssl_certificate_key nginx.key;
+
+		ssl_protocols TLSv1 TLSv1.2;
+		ssl_prefer_server_ciphers on;
+		#ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+		ssl_ciphers 'ECDHE+RSAGCM:ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:!DSS:!DH:!AECDH:AES:!PSK';
+		ssl_session_cache off;
+
+		#charset koi8-r;
+
+		location / {
+			#proxy_set_header Host $host;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-Host $Host;
+			proxy_set_header X-Forwarded-Prot $Scheme;
+			proxy_pass   http://backend;
+			proxy_cache off;
+			proxy_http_version 1.1;
+			#root   html;
+			#index  index.html index.htm;
+		}
+
+		# redirect server error pages to the static page /50x.html
+		#
+		error_page   500 502 503 504  /50x.html;
+		location = /50x.html {
+			root   html;
+		}
 	}
-}
 
-server {
-	listen       8000;
-	server_name  nginx-proxy;
+	server {
+		listen       8080;
+		server_name  nginx-proxy;
 
-	location / {
-		root   html;
-		index  index.html index.htm;
-		proxy_pass   http://backend;
-	}
+		location / {
+			root   html;
+			index  index.html index.htm;
+			proxy_pass   http://backend;
+		}
 
-	# redirect server error pages to the static page /50x.html
-	#
-	error_page   500 502 503 504  /50x.html;
-	location = /50x.html {
-		root   html;
+		# redirect server error pages to the static page /50x.html
+		#
+		error_page   500 502 503 504  /50x.html;
+		location = /50x.html {
+			root   html;
+		}
 	}
 }
