@@ -24,6 +24,10 @@ if $(which apt >/dev/null 2>&1); then
 	apt install -y libgnutls-dev
 fi
 
+if $(which yum >/dev/null 2>&1); then
+	yum install -y gnutls-devel
+fi
+
 mkdir -p pkg
 
 if [ ! -f pkg/$HTTPRESS ]; then
