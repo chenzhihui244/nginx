@@ -2,10 +2,12 @@
 
 source scripts/profile
 
+ulimit -n 102400
+
 target=${1-"localhost"}
 
 threads=64
-(( connections=threads*4 ))
+(( connections=threads*16 ))
 (( requests=connections*4000 ))
 
 url=https://${target}/index.html
