@@ -7,7 +7,7 @@ source scripts/profile
 
 setup_webserver()
 {
-	#cp conf/nginx/nginx.conf.webserver $NGINX_PATH/conf/nginx.conf
+	cp conf/nginx/nginx.conf.webserver $NGINX_PATH/conf/nginx.conf
 }
 
 setup_webserver
