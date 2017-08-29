@@ -1,3 +1,4 @@
+
 #!/bin/sh
 
 source scripts/profile
@@ -10,7 +11,7 @@ threads=64
 (( connections=threads*16 ))
 (( requests=connections*4000 ))
 
-url=http://${target}/index.html
+url=https://${target}/index.html
 
 httpress -n $requests -c $connections -t $threads $url
-#httpress -n 200000 -c 100 -t 64 -k http://192.168.1.188/index.html
+#httpress -n 200000 -c 100 -t 64 -k https://192.168.1.188/index.html
