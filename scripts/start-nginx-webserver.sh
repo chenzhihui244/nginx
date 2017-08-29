@@ -9,7 +9,7 @@ source scripts/profile
 
 setup_webserver()
 {
-	if [ ! -f $NGINX_PATH/conf/$CONF_FILE ] then
+	if [ ! -f $NGINX_PATH/conf/$CONF_FILE ]; then
 		cp conf/nginx/$CONF_FILE $NGINX_PATH/conf/
 	fi
 }
