@@ -6,9 +6,16 @@ ulimit -n 102400
 
 target=${1-"localhost"}
 
-threads=64
-(( connections=threads*16 ))
-(( requests=connections*4000 ))
+threads=8
+#threads=4
+#threads=1
+#threads=64
+(( connections=threads*4 ))
+#(( connections=threads*1 ))
+#(( connections=threads*16 ))
+#(( requests=connections*1 ))
+(( requests=connections*400000 ))
+#(( requests=connections*4000 ))
 
 url=http://${target}/index.html
 
